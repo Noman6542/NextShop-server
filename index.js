@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');  
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 app.use(cors());          
@@ -67,8 +67,8 @@ async function run() {
     });
     app.get("/items/:id", async (req, res) => {
   try {
-    const id = parseInt(req.params.id); // assuming id is number
-    const item = await items.findOne({ id });
+     const id = req.params.id;
+    const item = await items.findOne({ _id: new ObjectId(id) });
     if (!item) return res.status(404).json({ message: "Item not found" });
     res.json(item);
   } catch (err) {
